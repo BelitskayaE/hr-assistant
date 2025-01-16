@@ -1,46 +1,112 @@
-# Getting Started with Create React App
+# Resume Match Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 📖 Project Description
 
-## Available Scripts
+**Resume Match Application** is a React-based web app that allows users to upload multiple PDF resumes and compare them with a job description. The app leverages the OpenAI API to analyze and score how well each resume matches the job description. Results are displayed in an intuitive interface, highlighting the most suitable candidates.
 
-In the project directory, you can run:
+## 🚀 Features
 
-### `npm start`
+- Upload multiple **PDF** resumes.
+- Enter a **job description** for comparison.
+- Analyze resumes using the **OpenAI API**.
+- Display results with **match percentages** and **recommendations**.
+- Responsive UI with **Dark/Light mode**.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 🛠️ Tech Stack
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- **React** + **TypeScript**
+- **Ant Design** for UI components
+- **Styled-components** for styling
+- **Axios** for API requests
+- **OpenAI API** for resume analysis
 
-### `npm test`
+## 🔑 API Integrations
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 1. **PDF to Text Extraction**
+- **API:** [PDF.co API](https://pdf.co/)
+- **Usage:** Extracts text from uploaded PDF resumes.
+- **Request:**
 
-### `npm run build`
+```typescript
+const extractTextFromPDF = async (file: File): Promise<string> => {
+  const formData = new FormData();
+  formData.append("file", file);
+  const response = await axios.post("https://api.pdf.co/v1/pdf/convert/to/text", formData, {
+    headers: {
+      "x-api-key": YOUR_PDFCO_API_KEY,
+      "Content-Type": "multipart/form-data"
+    }
+  });
+  return response.data.body;
+};
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 2. **Resume Analysis with OpenAI**
+- **API:** [OpenAI API](https://platform.openai.com/)
+- **Usage:** Compares resume text with the job description.
+- **Request:**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```typescript
+const analyzeResumeWithJobDescription = async (jobDescription: string, resumeText: string) => {
+  const response = await axios.post("https://api.openai.com/v1/chat/completions", {
+    model: "gpt-3.5-turbo",
+    messages: [
+      { role: "system", content: "You are an HR assistant evaluating resumes." },
+      { role: "user", content: `Job Description: ${jobDescription}\nResume: ${resumeText}` }
+    ]
+  }, {
+    headers: {
+      Authorization: `Bearer YOUR_OPENAI_API_KEY`,
+      "Content-Type": "application/json"
+    }
+  });
+  return response.data.choices[0].message.content;
+};
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## ⚙️ Installation & Setup
 
-### `npm run eject`
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/resume-match-app.git
+   cd resume-match-app
+   ```
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+3. **Run the app:**
+   ```bash
+   npm start
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## 💼 Folder Structure
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+src/
+├── components/
+│   ├── JobInput.tsx
+│   ├── ResumeInput.tsx
+│   └── ResultDisplay.tsx
+├── mock/
+│   └── mockData.ts
+├── utils/
+│   └── api.ts
+├── types/
+│   └── index.d.ts
+└── App.tsx
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## 🌙 Dark/Light Mode
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- The app supports **Dark** and **Light** modes.
+- In **Dark Mode**, backgrounds are dark, and text is white.
+- In **Light Mode**, all text is white for better readability.
 
-## Learn More
+## 📝 License
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+MIT License © 2024 Resume Match App
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
+
+🔔 **Note:** Replace `YOUR_OPENAI_API_KEY` and `YOUR_PDFCO_API_KEY` with valid keys.
