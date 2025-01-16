@@ -1,0 +1,19 @@
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+font-family: 'Montserrat', sans-serif;
+}
+
+.dark-mode {
+  background-color: #141414;
+  color: white;
+}
+
+.ant-layout {
+  transition: background-color 0.3s ease;
+}
